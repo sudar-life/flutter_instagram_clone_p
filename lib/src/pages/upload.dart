@@ -188,7 +188,7 @@ class Upload extends GetView<UploadController> {
   Widget _photoWidget(AssetEntity asset, int size,
       {required Widget Function(Uint8List) builder}) {
     return FutureBuilder(
-      future: asset.thumbDataWithSize(size, size),
+      future: asset.thumbnailDataWithSize(ThumbnailSize(size, size)),
       builder: (_, AsyncSnapshot<Uint8List?> snapshot) {
         if (snapshot.hasData) {
           return builder(snapshot.data!);

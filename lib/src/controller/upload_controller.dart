@@ -65,7 +65,7 @@ class UploadController extends GetxController {
 
   Future<void> _pagingPhotos(AssetPathEntity album) async {
     imageList.clear();
-    var photos = await album.getAssetListPaged(0, 30);
+    var photos = await album.getAssetListPaged(page: 0, size: 30);
     imageList.addAll(photos);
     changeSelectedImage(imageList.first);
   }

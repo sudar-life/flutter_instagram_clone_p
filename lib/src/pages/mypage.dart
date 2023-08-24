@@ -31,41 +31,39 @@ class MyPage extends GetView<MypageController> {
   Widget _information() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 15),
-      child: Obx(
-        () => Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                AvatarWidget(
-                  type: AvatarType.TYPE3,
-                  thumbPath: controller.targetUser.value.thumbnail!,
-                  size: 80,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              // AvatarWidget(
+              //   type: AvatarType.TYPE3,
+              //   thumbPath: controller.targetUser.value.thumbnail!,
+              //   size: 80,
+              // ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(child: _statisticsOne('Post', 15)),
+                    Expanded(child: _statisticsOne('Followers', 11)),
+                    Expanded(child: _statisticsOne('Following', 3)),
+                  ],
                 ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      Expanded(child: _statisticsOne('Post', 15)),
-                      Expanded(child: _statisticsOne('Followers', 11)),
-                      Expanded(child: _statisticsOne('Following', 3)),
-                    ],
-                  ),
-                )
-              ],
+              )
+            ],
+          ),
+          const SizedBox(height: 10),
+          Text(
+            'controller.targetUser.value.description!',
+            style: const TextStyle(
+              fontSize: 13,
+              color: Colors.black,
             ),
-            const SizedBox(height: 10),
-            Text(
-              controller.targetUser.value.description!,
-              style: const TextStyle(
-                fontSize: 13,
-                color: Colors.black,
-              ),
-            )
-          ],
-        ),
+          )
+        ],
       ),
     );
   }
@@ -157,90 +155,153 @@ class MyPage extends GetView<MypageController> {
   }
 
   Widget _tabMenu() {
-    return TabBar(
-      controller: controller.tabController,
-      indicatorColor: Colors.black,
-      indicatorWeight: 1,
-      tabs: [
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: ImageData(IconsPath.gridViewOn),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          child: ImageData(IconsPath.myTagImageOff),
-        ),
-      ],
+    return SliverToBoxAdapter(
+      child: TabBar(
+        controller: controller.tabController,
+        indicatorColor: Colors.black,
+        indicatorWeight: 1,
+        tabs: [
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: ImageData(IconsPath.gridViewOn),
+          ),
+          Container(
+            padding: const EdgeInsets.symmetric(vertical: 10),
+            child: ImageData(IconsPath.myTagImageOff),
+          ),
+        ],
+      ),
     );
   }
 
   Widget _tabView() {
-    return GridView.builder(
-      physics: const NeverScrollableScrollPhysics(),
-      shrinkWrap: true,
-      itemCount: 100,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3,
-        childAspectRatio: 1,
-        mainAxisSpacing: 1,
-        crossAxisSpacing: 1,
+    return TabBarView(controller: controller.tabController, children: [
+      GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: 100,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1,
+          mainAxisSpacing: 1,
+          crossAxisSpacing: 1,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            color: Colors.grey,
+          );
+        },
       ),
-      itemBuilder: (BuildContext context, int index) {
-        return Container(
-          color: Colors.grey,
-        );
-      },
-    );
+      GridView.builder(
+        physics: const NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        itemCount: 100,
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 3,
+          childAspectRatio: 1,
+          mainAxisSpacing: 1,
+          crossAxisSpacing: 1,
+        ),
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            color: Colors.grey,
+          );
+        },
+      ),
+    ]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        elevation: 0,
-        title: Obx(
-          () => Text(
-            controller.targetUser.value.nickname!,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-              color: Colors.black,
-            ),
-          ),
-        ),
-        actions: [
-          GestureDetector(
-            onTap: () {},
-            child: ImageData(
-              IconsPath.uploadIcon,
-              width: 50,
-            ),
-          ),
-          GestureDetector(
-            onTap: () {},
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: ImageData(
-                IconsPath.menuIcon,
-                width: 50,
-              ),
-            ),
-          ),
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            _information(),
-            _menu(),
-            _discoverPeople(),
-            const SizedBox(height: 20),
+      appBar: AppBar(),
+      body: NestedScrollView(
+        headerSliverBuilder: (context, value) {
+          return [
+            SliverToBoxAdapter(
+                child: Column(
+              children: [
+                _information(),
+                _menu(),
+                _discoverPeople(),
+                const SizedBox(height: 20),
+              ],
+            )),
             _tabMenu(),
-            _tabView(),
-          ],
+          ];
+        },
+        body: Container(
+          child: TabBarView(
+            controller: controller.tabController,
+            children: [
+              // / Each content from each tab will have a dynamic height
+              GridView.builder(
+                physics: const NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 100,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  childAspectRatio: 1,
+                  mainAxisSpacing: 1,
+                  crossAxisSpacing: 1,
+                ),
+                itemBuilder: (BuildContext context, int index) {
+                  return Container(
+                    color: Colors.grey,
+                  );
+                },
+              ),
+              // Container(),
+              Container()
+            ],
+          ),
         ),
       ),
     );
+    // return Scaffold(
+    //   backgroundColor: Colors.white,
+    //   appBar: AppBar(
+    //     elevation: 0,
+    //     title: Text(
+    //       'controller.targetUser.value.nickname!',
+    //       style: const TextStyle(
+    //         fontWeight: FontWeight.bold,
+    //         fontSize: 20,
+    //         color: Colors.black,
+    //       ),
+    //     ),
+    //     actions: [
+    //       GestureDetector(
+    //         onTap: () {},
+    //         child: ImageData(
+    //           IconsPath.uploadIcon,
+    //           width: 50,
+    //         ),
+    //       ),
+    //       GestureDetector(
+    //         onTap: () {},
+    //         child: Padding(
+    //           padding: const EdgeInsets.all(15.0),
+    //           child: ImageData(
+    //             IconsPath.menuIcon,
+    //             width: 50,
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    //   body: NestedScrollView(
+    //     headerSliverBuilder: (context, value) {
+    //       return [
+    //         _information(),
+    //         _menu(),
+    //         _discoverPeople(),
+    //         const SizedBox(height: 20),
+    //         _tabMenu(),
+    //       ];
+    //     },
+    //     body: _tabView(),
+    //   ),
+    // );
   }
 }

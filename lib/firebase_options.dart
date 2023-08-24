@@ -33,6 +33,7 @@ class DefaultFirebaseOptions {
           'DefaultFirebaseOptions have not been configured for macos - '
           'you can reconfigure this by running the FlutterFire CLI again.',
         );
+      default:
     }
 
     throw UnsupportedError(
@@ -41,11 +42,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: '',
-    appId: '',
+    apiKey: 'AIzaSyBACVvWZpycqjaxClkwxDbWdvbAxDqfBhY',
+    appId: '1:1059322137775:android:ac8c70c0232f54ba55d85a',
     messagingSenderId: '',
-    projectId: '',
-    storageBucket: '',
+    projectId: 'instagram-clone-app002',
+    storageBucket: 'instagram-clone-app002.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
